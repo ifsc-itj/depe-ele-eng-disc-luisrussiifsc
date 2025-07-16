@@ -191,6 +191,13 @@ O ESP32 possui até 18 canais de ADC, com resolução de até 12 bits, capazes d
 
 O ESP32 conta com o recurso de DMA (Direct Memory Access), que permite a transferência direta de dados entre periféricos e a memória RAM, sem a intervenção direta do processador principal. Isso é especialmente útil em aplicações que exigem aquisição de dados em alta velocidade, como leitura contínua do ADC, comunicação serial ou processamento de sinais digitais. Com o uso do DMA, é possível configurar buffers circulares para armazenar amostras do ADC de forma eficiente, liberando o processador para executar outras tarefas em paralelo e reduzindo o risco de perda de dados por estouro de buffer. Esse recurso proporciona maior desempenho, precisão e confiabilidade em projetos embarcados que demandam manipulação intensiva de dados, sendo uma das vantagens do ESP32 em relação a microcontroladores mais simples.
 
+# modulação e demodulação FSK 
+
+A modulação em frequência (FM) consiste em variar a frequência de uma portadora senoidal de acordo com o sinal de informação, mantendo sua amplitude constante. Esse tipo de modulação é amplamente utilizado por proporcionar maior imunidade a ruídos e interferências. O processo de demodulação FM, por sua vez, envolve a recuperação do sinal original a partir das variações de frequência da portadora, utilizando circuitos discriminadores, PLL (Phase-Locked Loop) ou algoritmos digitais. Dessa forma,FM permite uma transmissão mais robusta e estável, sendo aplicada em rádio, comunicação sem fio e sistemas de transmissão de dados. Neste projeto será utilziada a abordagem de lgoritmos digitais por meios de filtros digitais para a demodulação
+
+# Bits e frequências
+
+Na comunicação digital utilizando modulação em frequência (FM), cada bit de informação pode ser associado a uma frequência distinta da portadora. Por exemplo, um bit '0' pode ser representado por uma frequência f₀ e um bit '1' por uma frequência f₁. Durante a transmissão, o sinal alterna entre essas frequências de acordo com a sequência de bits a ser enviada, enquanto a amplitude permanece constante. O processo de demodulação consiste em identificar, no receptor, qual frequência está presente em cada intervalo de tempo, permitindo assim a reconstrução da mensagem original em bits. Essa abordagem, conhecida como Frequency Shift Keying (FSK), é bastante robusta contra ruídos e adequada para sistemas digitais que utilizam modulação FM.
 
 # Transmissor
 
@@ -552,17 +559,115 @@ Antes da análise das transformadas de Fourier obtidas a partir dos sinais adqui
 
 Então, para dar continuidade à validação da comunicação, a etapa seguinte consistiu no dimensionamento de filtros digitais capazes de isolar as frequências mais expressivas do sinal para a demodulação, ou seja, a identificação da frequência ressonante. Esses filtros foram projetados para atuar especificamente nas bandas correspondentes às frequências resultantes do processo de subamostragem, facilitando a detecção precisa dos bits transmitidos, mesmo na presença de ruídos ou distorções.
 
-Então para o dimensionamento dos filtros, foi utilizado o softwate Octave para compreender quais as caracter´sitcas deste filtro, diante dos testes realziados com os dados adquie=ridos, foi escolhido a topologia butterwaolf 
+Como mencionado anteriormente, o processo de demodulação neste projeto depende da identificação precisa das frequências transmitidas, pois a modulação escolhida foi baseada em variação de frequência (FSK). Considerando que a abordagem proposta privilegia o uso de processamento digital, a estratégia mais adequada foi a utilização de filtros digitais associados ao cálculo da energia em cada faixa de frequência. 
+
+Então faz necessário o dimensionamento desses filtros, utilizou-se o software Octave, que, a partir dos dados previamente coletados, possibilitou a análise das características espectrais dos sinais recebidos, bem como simulações para projetar filtros eficientes. Dessa forma, foi possível ajustar os parâmetros dos filtros digitais para isolar as frequências de interesse, facilitando o processo de demodulação. 
+
+Nas imagens anteriores que mostram os dados coletados, percebe-se que as principais frequências de transmissão aparecem em 10,8 kHz e 11,8 kHz. Assim, foram realizados diversos testes com filtros digitais, sendo que os melhores resultados foram obtidos utilizando dois filtros passa-faixa de oitava ordem, cada um com largura de banda de 500 Hz, centralizados em suas respectivas frequências. Esses filtros permitiram isolar de forma eficiente os sinais transmitidos, proporcionando o processo de demodulação.
+
+<p align="center"><b>Figura 4 –Função de transferência filtro passa faixa centrado em 9.8 khz </b></p>
+
+<p align="center">
+  <img src="image-23.png" alt="Transdutor Ultrassônico" width="350">
+</p>
+
+<p align="center"><b>
+Fontes: Autor
+</b></p>
+
+
+<p align="center"><b>Figura 4 –Sinal distorcido </b></p>
+
+<p align="center">
+  <img src="image-28.png" alt="Transdutor Ultrassônico" width="350">
+</p>
+
+<p align="center"><b>
+Fontes: Autor
+</b></p>
+
+
+<p align="center"><b>Figura 4 –Função de transferência filtro passa faixa centrado em 10.8 khz  </b></p>
+
+<p align="center">
+  <img src="image-25.png" alt="Transdutor Ultrassônico" width="350">
+</p>
+
+<p align="center"><b>Figura 4 –Sinal distorcido </b></p>
+
+<p align="center">
+  <img src="image-29.png" alt="Transdutor Ultrassônico" width="350">
+</p>
+
+<p align="center"><b>
+Fontes: Autor
+</b></p>
+
+
+Após diversos testes foi possível concluir que colentando 2048 amostras com uma taxa de amostragem d 31 kHz, é possível ientificar com clareza a frqeuencia enviada, abaixo é mostrado o sinal filtrado em cada filtro passa faixa.
+
+<p align="center"><b>Figura - Sinais obtidos com após filtragem</b></p>
+
+  </span>
+</p>
+<p align="center">
+  <img src="image-26.png" alt="Figura 1" width="250"/>
+  <img src="image-27.png" alt="Figura 2" width="230"/>
+</p>
+<p align="center"><b>Fonte: Autor</b></p>
+
+## Sistema de ganho automático
+
+Durante os testes iniciais com o potenciômetro digital X9C104, foi constatado que a lógica de comunicação do componente aceita níveis lógicos de 3,3 V. No entanto, sua alimentação é de 5 V, o que impossibilita o uso direto com o microcontrolador ESP32-S3. Após realizar as correções necessárias no circuito, o aluno não obteve êxito em utilizar o CI, possivelmente devido a danos ocorridos nos primeiros testes. Dessa forma, não foi possível implementar o sistema de ganho automático controlado pelo ESP32-S3.
 
 # Conclusão
 
+Durante o desenvolvimento do projeto, foram definidos objetivos específicos, os quais orientaram as principais etapas do trabalho. Os objetivos podem ser classificados em **cumpridos** e **não cumpridos**, conforme descrito a seguir:
+
+### Objetivos específicos cumpridos
+
+- **Programar o algoritmo de modulação no ESP32 para geração do sinal:**  
+  Foi implementado com sucesso um algoritmo de modulação digital no ESP32, permitindo a geração de sinais adequados para transmissão acústica conforme o planejado no escopo do projeto.
+
+- **Adaptar o sinal gerado pelo ESP32 para a transmissão acústica:**  
+  O sinal digital produzido pelo ESP32 foi devidamente condicionado e convertido para um formato compatível com o transdutor acústico, possibilitando a emissão do sinal no meio físico.
+
+- **Programar o ESP32 para realizar a amostragem do sinal recebido:**  
+  O microcontrolador ESP32 foi configurado para amostrar os sinais captados pelo sensor acústico, armazenando os dados recebidos em buffer para posterior processamento e análise.
+
+- **Simular e implementar a estratégia de demodulação mais eficaz:**  
+  Foram realizadas simulações em ambiente computacional das diferentes estratégias de demodulação, sendo selecionada e implementada no ESP32 a que apresentou melhor desempenho frente às características do canal acústico.
+
+- **Pesquisar e adquirir os componentes necessários para a implementação:**  
+  Todos os componentes eletrônicos e módulos necessários, tais como transdutores, amplificadores e acessórios, foram devidamente pesquisados, selecionados e adquiridos conforme as necessidades do projeto.
+
+- **Integrar todas as etapas do projeto em um sistema funcional:**  
+  As etapas de geração, transmissão, recepção e demodulação do sinal foram integradas em um sistema único e quase tototalmente funcional, permitindo a realização de testes do sistema como um todo.
+
+### Objetivos específicos não cumpridos
+
+- **Condicionar o sinal recebido para aquisição pelo ESP32:**  
+  Apesar dos esforços, não foi possível desenvolver um condicionamento eficiente do sinal captado pelo sensor para garantir sua adequada aquisição pelo conversor analógico-digital do ESP32. Problemas como incompatibilidade de impedância de entrada com o amplificador operacional, assim como a resposta rápida necessária que o amplifciador não proporcionou.
+
+- **Realizar testes de comunicação a uma distância mínima de 5 metros:**  
+  Devido a limitações no condicionamento do sinal recebido e questões relacionadas ao ambiente de testes, não foi possível validar a comunicação acústica com desempenho satisfatório para distâncias iguais ou superiores a 5 metros.
+
+- **Garantir uma taxa de transmissão de pelo menos 100 bits/s:**  
+  Em função dos obstáculos enfrentados na recepção e demodulação, a taxa de transmissão do sistema não atingiu o mínimo estabelecido de 100 bits por segundo. A instabilidade na aquisição do sinal e as perdas durante a transmissão comprometeram a taxa de dados efetiva.
+
+Esses resultados demonstram o progresso alcançado em partes essenciais do sistema, ao mesmo tempo em que evidenciam desafios práticos e limitações técnicas que poderão ser foco de melhorias em trabalhos futuros.
+
+Em resumo, o transmissor funcionou com êxito conforme o esperado. No entanto, o receptor não apresentou o desempenho desejado na configuração proposta. Apesar disso, a utilização de um processo exclusivamente digital para demodulação demonstrou ser robusta em relação à condição do sinal adquirido, permitindo a identificação eficiente das frequências presentes.
+
+
 ### Dificuldades encontradas
 
-[Apresente as dificuldades encontradas durante ao longo do desenvolvimento do seu trabalho.]
+Durante o desenvolvimento deste trabalho, foram encontradas diversas dificuldades. Entre as principais, destaca-se a limitação de fornecedores e a dificuldade para obter transdutores ultrassônicos adequados, o que exigiu adaptações e escolhas alternativas de componentes. Também surgiram desafios relacionados à montagem e ajuste dos circuitos analógicos, especialmente na filtragem e amplificação do sinal, onde limitações de slew rate dos amplificadores operacionais e ruídos indesejados impactaram a qualidade do sinal recebido. Além disso, a limitação da taxa de amostragem do ADC do ESP32-S3 exigiu a implementação de técnicas de subamostragem e processamento digital mais elaborado. Por fim, a integração de todos os módulos do sistema e a obtenção de comunicação estável em ambiente aquático demandaram testes contínuos e ajustes frequentes, evidenciando a complexidade de projetos experimentais envolvendo comunicação subaquática.
+
 
 ### Sugestões para trabalhos futuros
 
-[Apresente suas sugestões de trabalhos futuros.]
+[Como sugestões para trabalhos futuros, recomenda-se a exploração de transdutores ultrassônicos de maior sensibilidade e largura de banda, bem como o desenvolvimento de circuitos de amplificação e filtragem com componentes otimizados para operação em altas frequências, visando reduzir ruídos e distorções. A implementação de algoritmos de demodulação mais sofisticados, como detecção baseada em machine learning ou técnicas de espectrograma, pode aumentar a robustez da comunicação em ambientes mais ruidosos. Também seria interessante testar diferentes protocolos de comunicação e estratégias de correção de erros para ampliar o alcance e a confiabilidade do sistema. Por fim, sugere-se a realização de experimentos em ambientes subaquáticos reais, com distâncias maiores entre transmissor e receptor, a fim de validar a solução em condições mais próximas de aplicações práticas.]
 
 ## Referências
 
