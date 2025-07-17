@@ -1,63 +1,5 @@
-<div align="justify">
 
 # Modem Acústico
-
-## Sumário
-
-- [Introdução: Contexto e Necessidade](#introdução-contexto-e-necessidade)
-- [Revisão da literatura](#revisão-da-literatura)
-- [1. Tecnologias e Abordagens](#1-tecnologias-e-abordagens)
-  - [1.1 Modulação](#11-modulação)
-  - [1.2 Plataformas de Hardware](#12-plataformas-de-hardware)
-  - [1.3 Protocolos e Eficiência Energética](#13-protocolos-e-eficiência-energética)
-- [2. Limitações e Desafios](#2-limitações-e-desafios)
-  - [2.1 Taxa de Dados (Throughput)](#21-taxa-de-dados-throughput)
-  - [2.2 Alcance de Comunicação](#22-alcance-de-comunicação)
-  - [2.3 Robustez em Ambientes Dinâmicos](#23-robustez-em-ambientes-dinâmicos)
-  - [2.4 Limitações dos Transdutores](#24-limitações-dos-transdutores)
-- [4. Exemplos e Desempenho](#4-exemplos-e-desempenho)
-- [5. Materiais e Métodos](#5-materiais-e-métodos)
-  - [5.1 Materiais](#5.1-materiais)
-  - [5.2 Métodos](#5.2-métodos)
-- [Microcontrolador](#microcontrolador)
-- [Transmissor](#transmissor)
-  - [1. Seleção e Caracterização do Transdutor Ultrassônico](#1-seleção-e-caracterização-do-transdutor-ultrassônico)
-  - [2. Implementação da Modulação M-FSK no ESP32](#2-implementação-da-modulação-m-fsk-no-esp32)
-  - [3. Projeto do Amplificador Classe D e Circuitos de Potência](#3-projeto-do-amplificador-classe-d-e-circuitos-de-potência)
-  - [4. Filtro de saída sintonizado](#4-filtro-de-saída-sintonizado)
-- [Receptor](#receptor)
-  - [1. Condicionamento do Sinal Recebido](#1-condicionamento-do-sinal-recebido)
-    - [1.1 Controle de ganho automático](#11-controle-de-ganho-automático)
-  - [2. Amostragem e Demodulação Digital](#2-amostragem-e-demodulação-digital)
-    - [2.1 Subamostragem](#21-subamostragem)
-  - [7. Integração e Prototipagem](#7-integração-e-prototipagem)
-  - [8. Testes Experimentais e Validação](#8-testes-experimentais-e-validação)
-- [Resultados](#resultados)
-- [Conclusão](#conclusão)
-  - [Dificuldades encontradas](#dificuldades-encontradas)
-  - [Sugestões para trabalhos futuros](#sugestões-para-trabalhos-futuros)
-- [Referências](#referências)
-
----
-
-## Lista de Figuras
-
-- [Figura 1 – Diagrama do projeto proposto](#figura-1--diagrama-do-projeto-proposto)
-- [Figura 2 – Transdutor Ultrassônico Utilizado no Projeto](#figura-2--transdutor-ultrassônico-utilizado-no-projeto)
-- [Figura 3 – Função de transferência do transdutor ultrassônico](#figura-3--função-de-transferência-do-transdutor-ultrassônico)
-- [Figura 4 – Etapas de um amplificador classe D](#figura-4--etapas-de-um-amplificador-classe-d)
-- [Figura 5 – Resposta característica de um filtro LC passa-faixa](#figura-5--resposta-característica-de-um-filtro-lc-passa-faixa)
-- [Figura 6 – Simulação filtro LC](#figura-6--simulação-filtro-lc)
-- [Figura 7 – Potenciômetro Digital](#figura-7--potenciômetro-digital)
-- [Figura 8 – Espectro subamostrado](#figura-8--espectro-subamostrado)
-
----
-
-## Lista de Tabelas
-
-- [Tabela 1 – Especificações Técnicas do Módulo Sensor Ultrassônico JSN-SR04T/AJ-SR04M](#tabela-1--especificações-técnicas-do-módulo-sensor-ultrassônico-jsn-sr04taj-sr04m)
-- [Tabela 2 – Principais Características do ESP32](#tabela-2--principais-características-do-esp32)
-
 
 ## Introdução: Contexto e Necessidade
 
@@ -67,22 +9,22 @@ Neste contexto, o presente projeto propõe o desenvolvimento de um modem digital
 
 ## Revisão da literatura
 
-## 1. Tecnologias e Abordagens
+## Tecnologias e Abordagens
 
-### 1.1 Modulação
+### Modulação
 
 A modulação FSK (Frequency Shift Keying) é predominante nos modems de baixo custo por sua simplicidade e robustez, embora tenha limitação de taxa de dados【Indriyanto et al., 2018】【Lee et al., 2014】【Renner et al., 2020】. Modulações alternativas, como PSK, MFSK, DSSS e OFDM, são empregadas para elevar taxas ou robustez em projetos mais avançados【Su et al., 2020】【Sherlock et al., 2022】【Chen et al., 2022】.
 
-### 1.2 Plataformas de Hardware
+### Plataformas de Hardware
 
 A escolha de microcontroladores acessíveis, como STM32 (diversos modelos) e ARM Cortex, permite projetos compactos, de baixo custo e baixo consumo energético【Su et al., 2020】【Chen et al., 2022】【Sherlock et al., 2022】. Outra abordagem recorrente é a utilização de transdutores piezoelétricos baratos, inclusive sensores automotivos adaptados para uso subaquático【Indriyanto et al., 2018】【Campagnaro et al., 2023】【Renner et al., 2020】.
 
-### 1.3 Protocolos e Eficiência Energética
+### Protocolos e Eficiência Energética
 
 Para otimizar o uso de energia, diversas estratégias são aplicadas: wake-up assíncrono, duty cycling e protocolos MAC adaptados (CSMA, TDMA). Modos sleep/wake ampliam a autonomia dos dispositivos, sendo essenciais em redes densas ou de longa duração【Sánchez et al., 2012】【Renner et al., 2020】. A avaliação do canal antes da transmissão (clear channel assessment) é outra solução presente em projetos recentes.
-## 2. Limitações e Desafios
+## Limitações e Desafios
 
-### 2.1 Taxa de Dados (Throughput)
+### Taxa de Dados (Throughput)
 
 Modems econômicos geralmente operam em taxas de 40 a 640 bps (em raros casos chegando a alguns kbps), o que é suficiente para telemetria básica, mas limita aplicações que demandam transmissão de grandes volumes de dados, como vídeo, áudio em tempo real ou controle de veículos em missões complexas.
 
@@ -90,7 +32,7 @@ Técnicas mais robustas de modulação, como MFSK, DSSS ou MOS, melhoram a resis
 
 ---
 
-### 2.2 Alcance de Comunicação
+### Alcance de Comunicação
 
 O alcance típico para modems de baixo custo varia de poucos metros (caso de sensores ultrassônicos adaptados, como JSN-SR04T) até algumas centenas de metros (Ahoi, ITACA) e raramente ultrapassa 2 km sem aumento significativo do consumo ou do custo do transdutor【Chen et al., 2022】【Renner et al., 2020】【Sánchez et al., 2012】.
 
@@ -98,7 +40,7 @@ Limitações no alcance se devem ao baixo nível de potência dos transmissores 
 
 ---
 
-### 2.3 Robustez em Ambientes Dinâmicos
+### Robustez em Ambientes Dinâmicos
 
 **Multi-caminho:** Reflexões no fundo, superfície e obstáculos criam cópias defasadas do mesmo sinal, causando interferência intersimbólica, distorção do pacote e aumento do BER (Bit Error Rate). Isso se agrava em ambientes rasos ou próximos a estruturas, comuns em aplicações reais【Renner et al., 2020】.
 
@@ -106,14 +48,19 @@ Limitações no alcance se devem ao baixo nível de potência dos transmissores 
 
 ---
 
-### 2.4 Limitações dos Transdutores
+### Limitações dos Transdutores
 
 Transdutores de baixo custo, como piezoelétricos automotivos, apresentam eficiência reduzida de conversão e largura de banda limitada, além de maior sensibilidade à direção do sinal (direcionalidade), limitando o desempenho em ambientes complexos.
 
 Projetos customizados conseguem reduzir custos, mas normalmente não atingem as especificações dos transdutores profissionais quanto a sensibilidade, robustez e faixa dinâmica.
 
 
-# 4. Exemplos e Desempenho
+# Exemplos e Desempenho
+
+<p align="center"><b>Tabela 1 – Comparações de modens acústicos</b></p>
+<div align="center">
+
+
 | Nome do Modem / Artigo      | Referência                                                                                                                                     | Tecnologia / Modulação          | Alcance / Taxa de Dados               | Características e Observações                                                                                |
 |-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|----------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | **ITACA**                   | Sánchez et al., 2012<br>*An Ultra-Low Power and Flexible Acoustic Modem Design to Develop Energy-Efficient Underwater Sensor Networks*          | FSK, 85 kHz                     | Até 240 m<br><0,1 W                    | Ultra-baixo consumo, uso de transdutor de echosounder, aplicação em sensores subaquáticos flexíveis.         |
@@ -125,11 +72,12 @@ Projetos customizados conseguem reduzir custos, mas normalmente não atingem as 
 | **Micromodem Xiamen Univ.** | Chen et al., 2022<br>*Underwater Acoustic Micromodem for Underwater Internet of Things*                                                        | MFSK, 35–45 kHz                 | 500 m<br>200–300 bps                    | Baixo custo (~500 USD), consumo reduzido, voltado para aplicações de IoT subaquático.                       |
 
 
-## 5 Materiais e Métodos
+## Materiais e Métodos
 
-### 5.1 Materiais
+### Materiais
 
-### 5.2 Métodos
+### Métodos
+<div align="justify">
 
 O desenvolvimento do modem digital para comunicação acústica subaquática será realizado em etapas integradas, visando garantir a viabilidade técnica e a robustez do sistema proposto. O projeto adota uma abordagem incremental, onde os principais blocos funcionais do sistema serão concebidos, testados e integrados de forma modular, permitindo ajustes conforme o andamento dos experimentos.
 
@@ -138,7 +86,8 @@ O desenvolvimento do modem digital para comunicação acústica subaquática ser
 <p align="center"><b>Figura 1 – Diagrama do projeto proposto</b></p>
 
 ![Texto alternativo](/Projeto%20Integrador%20III/Imagens/Diagrama.png)
-<p align="center"><b>Fonte: Aluno</b></p>
+<p align="center"><b>Fonte: Autor</b></p>
+<div align="justify">
 
 ## Microcontrolador
 
@@ -147,10 +96,10 @@ O **ESP32** é um microcontrolador moderno desenvolvido pela Espressif Systems, 
 
 <p align="center">
   <span style="display:inline-block; width:250px; text-align:center;">
-    <b>Figura 1 – Legenda da primeira imagem</b>
+    <b>Figura 2 – ESP32</b>
   </span>
   <span style="display:inline-block; width:190px; text-align:center;">
-    <b>Figura 2 – Legenda da segunda imagem</b>
+    <b>Figura 3 – ESP32 - S3</b>
   </span>
 </p>
 <p align="center">
@@ -158,6 +107,9 @@ O **ESP32** é um microcontrolador moderno desenvolvido pela Espressif Systems, 
   <img src="image-9.png" alt="Figura 2" width="190"/>
 </p>
 
+<p align="center"><b>Fonte: [Autocore Robótica]</b></p>
+
+<div align="justify">
 
 
 **PWM (Pulse Width Modulation)**  
@@ -201,14 +153,14 @@ Na comunicação digital utilizando modulação em frequência (FM), cada bit de
 
 # Transmissor
 
-### 1. Seleção e Caracterização do Transdutor Ultrassônico
+### Seleção e Caracterização do Transdutor Ultrassônico
 
 A primeira etapa consiste na pesquisa, aquisição e caracterização do transdutor ultrassônico, elemento central para a conversão entre sinais elétricos e acústicos. Serão realizados testes experimentais para determinar a resposta em frequência do transdutor, permitindo a escolha das frequências de operação ideais para a modulação M-FSK, que se espera estar próxima de 40 kHz. 
 
 Inicialmente, a ideia era adquirir um transdutor específico por meio de um site internacional, porém, constatou-se que esse fornecedor só realizava vendas em grandes quantidades. Em alternativa, buscou-se contato com outro fornecedor, mas não houve retorno aos questionamentos técnicos, como frequência de operação e potência suportada. Diante dessas limitações e para viabilizar o início dos experimentos, optou-se por utilizar o transdutor presente no módulo Sensor de Distância Ultrassônico JSN-SR04T Resistente a Água, facilitando assim o avanço do trabalho.
 
 O sensor JSN-SR04T é baseado em um transdutor piezoelétrico, tecnologia amplamente empregada em aplicações ultrassônicas devido à sua capacidade de converter sinais elétricos em vibrações mecânicas e vice-versa. Os cristais piezoelétricos presentes no transdutor deformam-se quando submetidos a uma tensão elétrica, gerando ondas ultrassônicas, e produzem sinais elétricos quando submetidos a pressão acústica. Essa característica faz com que o JSN-SR04T seja adequado tanto para emissão quanto para recepção de sinais acústicos, permitindo sua utilização em sistemas de comunicação subaquática de baixo custo, mesmo que originalmente tenha sido projetado para medição de distância.
-<p align="center"><b>Tabela 1 – Especificações Técnicas do Módulo Sensor Ultrassônico JSN-SR04T/AJ-SR04M</b></p>
+<p align="center"><b>Tabela 3 – Especificações Técnicas do Módulo Sensor Ultrassônico JSN-SR04T/AJ-SR04M</b></p>
 
 <div align="center">
 
@@ -233,7 +185,7 @@ O sensor JSN-SR04T é baseado em um transdutor piezoelétrico, tecnologia amplam
 
 <p align="center"><b>Fonte: [Autocore Robótica – Módulo Sensor Ultrassônico JSN-SR04T v3.0](https://www.autocorerobotica.com.br/modulo-sensor-ultrassonico-jsn-sr04t-v3-0)</b></p>
 
-<p align="center"><b>Figura 1 – Transdutor Ultrassônico Utilizado no Projeto</b></p>
+<p align="center"><b>Figura 4 – Transdutor Ultrassônico Utilizado no Projeto</b></p>
 
 <p align="center">
   <img src="image-1.png" alt="Transdutor Ultrassônico">
@@ -245,19 +197,19 @@ A principal característica de um transdutor piezoelétrico é o uso de materiai
 
  Da mesma forma, quando o material é submetido a uma pressão mecânica (como uma onda sonora incidente), ele gera uma diferença de potencial elétrico entre as placas. Portanto, além de se comportar eletricamente como um capacitor, o piezoelétrico tem a capacidade adicional de interagir diretamente com sinais acústicos, o que o torna ideal para aplicações em sensores e emissores ultrassônicos. Diante das medições realizadas com um miltímetro foi concluído que a natureza capacitiva do transdutor escolhido é de em torno de 4,7nF.
 
-<p align="center"><b>Figura 2 – Função de transferência do transdutor ultrassônico</b></p>
+<p align="center"><b>Figura 5 – Função de transferência do transdutor ultrassônico</b></p>
 
 <p align="center">
   <img src="image-2.png" alt="Transdutor Ultrassônico" width="350">
 </p>
-<p align="center"><b>Fonte: Aluno</b></p>
+<p align="center"><b>Fonte: Autor</b></p>
 
 Antes de realizar os demais processos de implementação do sistema, foi fundamental caracterizar experimentalmente o transdutor utilizado. Essa etapa inicial garantiu que as próximas fases do projeto — como o desenvolvimento do circuito de transmissão, adaptação dos sinais e implementação da modulação — fossem baseadas em parâmetros reais e compatíveis com o desempenho do componente escolhido.
 
 Logo, com base nos resultados obtidos, concluiu-se que o intervalo de frequência mais interessante para operação situa-se entre 40 kHz e 42 kHz, faixa na qual o transdutor apresentou melhor resposta e maior eficiência para aplicações de modulação M-FSK no contexto do projeto.
 
 
-### 2. Implementação da Modulação M-FSK no ESP32
+### Implementação da Modulação M-FSK no ESP32
 
 O algoritmo de modulação digital foi desenvolvido e implementado no microcontrolador ESP32, utilizando a plataforma Arduino IDE para facilitar o processo de programação e depuração. O sinal M-FSK (Multiple Frequency Shift Keying) foi gerado via modulação por largura de pulso (PWM – Pulse Width Modulation) com frequência variável, controlada pelos temporizadores internos do ESP32. Essa estratégia permitiu flexibilidade na definição da taxa de transmissão, além de garantir um controle preciso das frequências, fundamental para o funcionamento do sistema de comunicação acústica. A seguir é mostrado o código utilizado, assim como sua respectiva explicação.
 
@@ -310,11 +262,11 @@ void loop() {
 O objetivo deste código é realizar a variação automática da frequência do sinal PWM gerado pelo ESP32, alternando entre dois valores distintos em intervalos regulares de tempo. Na prática, essa alternância simula uma modulação FSK (Frequency Shift Keying), técnica amplamente utilizada em sistemas de comunicação digital para representar diferentes símbolos ou bits por meio de diferentes frequências. Dessa forma, o código serve como uma base experimental para testes de modulação FSK, viabilizando a geração de sinais compatíveis com sistemas de comunicação acústica digital utilizando hardware de baixo custo.
 
 
-### 3. Projeto do Amplificador Classe D e Circuitos de Potência
+### Projeto do Amplificador Classe D e Circuitos de Potência
 
 O amplificador Classe D é um tipo de amplificador de potência que utiliza a operação por chaveamento para converter sinais de entrada analógicos ou digitais em uma forma de onda pulsada, geralmente por meio de modulação por largura de pulso (PWM). Diferente dos amplificadores lineares tradicionais, como os de Classe A, B ou AB, o Classe D alterna rapidamente os transistores de potência entre os estados de corte e saturação, minimizando as perdas de energia por dissipação térmica. Essa característica confere ao amplificador Classe D uma alta eficiência energética, tornando-o especialmente vantajoso para aplicações que exigem potência elevada com baixo consumo, como sistemas de áudio, acionamento de motores e, no contexto deste projeto, a transmissão eficiente de sinais ultrassônicos.
 
-<p align="center"><b>Figura 3 – Etapas de um amplificador classe D</b></p>
+<p align="center"><b>Figura 6 – Etapas de um amplificador classe D</b></p>
 
 <p align="center">
   <img src="image-3.png" alt="Transdutor Ultrassônico" width="350">
@@ -343,7 +295,7 @@ Para a construção do circuito meia ponte foram utilizados dois MOSFETs IRF740,
 
 Após a amplificação do sinal, o mesma passa por um filtro LC sintonizado, projetado para maximizar a pureza espectral do sinal transmitido e garantir eficiência na conversão para o meio acústico. O filtro LC é composto por um indutor (L) e um capacitor (C) conectados de forma a criar um circuito ressonante na frequência desejada, funcionando como um seletor de frequência: permite a passagem apenas da faixa de interesse e atenua as demais. O dimensionamento do filtro foi realizado considerando a faixa de operação do transdutor e as limitações de potência dos componentes utilizados, assegurando que o sinal entregue ao transdutor estivesse o mais próximo possível de uma senóide pura também com uma ganho adequado às necessidades do sistema.
 
-<p align="center"><b>Figura 4 – Resposta características de um filtro LC passa faixa </b></p>
+<p align="center"><b>Figura 7 – Resposta características de um filtro LC passa faixa </b></p>
 
 <p align="center">
   <img src="image-4.png" alt="Transdutor Ultrassônico" width="350">
@@ -362,7 +314,7 @@ onde
 𝐿 é a indutância (1 mH) e 
 𝐶 é a capacitância total (14,7 nF). Assim, a associação em paralelo do capacitor adicional ao transdutor permitiu ajustar a frequência do filtro para a faixa desejada, tornando a resposta do circuito compatível com os requisitos do sistema.
 
-<p align="center"><b>Figura 6 – Simulação filtro LC</b></p>
+<p align="center"><b>Figura 8 – Simulação filtro LC</b></p>
 
 <p align="center">
   <img src="image-5.png" alt="Transdutor Ultrassônico" width="550">
@@ -371,11 +323,11 @@ onde
 
 # RECEPTOR
 
-### 1. Condicionamento do Sinal Recebido
+### Condicionamento do Sinal Recebido
 
 No receptor, o sinal captado pelo transdutor foi inicialmente aplicado a um buffer de entrada, utilizado para realizar o casamento de impedância entre o transdutor e o circuito de amplificação, minimizando perdas e distorções do sinal. O estágio de pré-amplificação foi implementado utilizando amplificadores operacionais ou JFETs, conforme o desempenho obtido em testes experimentais. Em seguida, o sinal passou por um filtro passa-faixa projetado para isolar as frequências de interesse e minimizar interferências externas. A restauração do nível DC do sinal foi realizada para garantir a compatibilidade com a entrada analógica do ESP32. 
 
-#### 1.1 Controle de ganho automático 
+#### Controle de ganho automático 
 
 Além da etapa anterior na recepção, ainda será implementado um sistema de controle automático de ganho (AGC) na recepção do sinal, com o objetivo de manter o sinal dentro da faixa ideal para conversão analógico-digital pelo ESP32, independentemente das variações na intensidade do sinal recebido. O AGC monitora continuamente o nível de saída do sinal após a amplificação e ajusta dinamicamente o ganho do circuito, de modo a evitar tanto a saturação quanto a presença de sinais muito fracos, que comprometeriam a resolução do ADC.
 
@@ -385,7 +337,7 @@ O potenciômetro digital utilizado para realizar o controle de ganho no circuito
 
 O ajuste do cursor é feito entre os terminais A e B, variando o valor lido no terminal W (wiper), exatamente como em um potenciômetro convencional. Essa configuração permite ao microcontrolador monitorar o nível do sinal e ajustar o ganho do amplificador operacional em tempo real, tornando o sistema de AGC mais preciso, prático e totalmente automatizado.
 
-<p align="center"><b>Figura 4 – Potenciômetro Digital </b></p>
+<p align="center"><b>Figura 9 – Potenciômetro Digital </b></p>
 
 <p align="center">
   <img src="image-6.png" alt="Transdutor Ultrassônico" width="150">
@@ -396,11 +348,11 @@ Fontes: <br>
 [AliExpress – Potenciômetro Digital X9C104](https://pt.aliexpress.com/item/1005008176591028.html)
 </b></p>
 
-### 2. Amostragem e Demodulação Digital
+### Amostragem e Demodulação Digital
 
 A taxa máxima de amostragem do ADC do ESP32-S3 é de 80 kHz, o que limita a aplicação direta do critério de Nyquist para sinais na faixa de 40 kHz a 42 kHz, já que o ideal seria uma taxa de amostragem superior ao dobro da frequência máxima do sinal. Diante dessa limitação, torna-se necessário utilizar a técnica de subamostragem (ou amostragem em banda passante), que permite adquirir sinais de alta frequência desde que estejam restritos a uma faixa específica do espectro e sejam tomadas precauções para evitar aliasing. O sinal condicionado será então adquirido pelo ADC e, para a demodulação digital, serão avaliadas e implementadas diferentes técnicas, como filtros digitais, algoritmo de Goertzel e FFT, buscando a extração eficiente das informações transmitidas e a minimização do erro de detecção.
 
-### 2.1 Subamostragem
+### Sub-amostragem
 
 A subamostragem, também chamada de amostragem em banda passante (ou “undersampling”, em inglês), é uma técnica utilizada para adquirir sinais analógicos de frequência elevada com taxas de amostragem inferiores àquelas recomendadas pelo critério de Nyquist para sinais em banda base. De acordo com o teorema de Nyquist-Shannon, para evitar aliasing, a frequência de amostragem deve ser, no mínimo, o dobro da maior frequência presente no sinal. No entanto, quando o sinal de interesse está confinado a uma banda de frequências superior (por exemplo, entre 40 kHz e 42 kHz), e não desde o zero até a frequência máxima, a subamostragem pode ser empregada de forma segura e eficiente.
 
@@ -414,7 +366,7 @@ Ao utilizar a subamostragem, o sinal em banda passante é intencionalmente amost
 
 - A frequência central do sinal e a frequência de amostragem devem ser escolhidas de forma que, após a amostragem, a banda de interesse seja posicionada corretamente no espectro digital, permitindo sua posterior detecção por algoritmos digitais.
 
-<p align="center"><b>Figura 4 – Espectro subamostrado </b></p>
+<p align="center"><b>Figura 10 – Espectro subamostrado </b></p>
 
 <p align="center">
   <img src="image-7.png" alt="Transdutor Ultrassônico" width="350">
@@ -430,11 +382,11 @@ Após a subamostragem, a banda original de 40 kHz a 42 kHz aparece, no espectro 
 
 Dentro do microcontrolador, são utilizados filtros digitais para processar os sinais adquiridos pelo ADC. Esses filtros são aplicados sobre os dados armazenados em buffers, permitindo isolar as componentes de frequência de interesse mesmo após a subamostragem. Após o processo de filtragem, o microcontrolador calcula a energia resultante de cada banda filtrada, facilitando a identificação das frequências presentes no sinal recebido. Essa análise da energia em cada faixa é fundamental para a demodulação do sinal e para a extração eficiente das informações transmitidas, tornando o sistema robusto mesmo diante de ruídos e interferências no ambiente subaquático.
 
-### 7. Integração e Prototipagem
+### Integração e Prototipagem
 
 Todos os blocos serão inicialmente montados e testados em protoboard, permitindo ajustes rápidos e validação funcional. Após a verificação individual das etapas, será desenvolvida uma placa de circuito impresso (PCI) para integração do sistema de forma compacta e robusta.
 
-### 8. Testes Experimentais e Validação
+### Testes Experimentais e Validação
 
 Os testes de comunicação serão realizados em ambiente controlado, com alcance inicial de pelo menos 5 metros, podendo ser ampliados conforme o desempenho observado. O sistema será avaliado quanto à taxa de transmissão, estabilidade do enlace e robustez frente a ruídos e interferências típicas do ambiente subaquático.
 
@@ -448,7 +400,7 @@ Os testes de comunicação serão realizados em ambiente controlado, com alcance
 Para avaliar e validar o circuito de transmissão de dados, o sistema foi inicialmente montado em protoboard e submetido a diversos testes, permitindo uma análise criteriosa de seu desempenho. O principal objetivo dessa etapa foi verificar se o circuito seria capaz de gerar ondas senoidais com o maior grau de pureza possível, condição essencial para garantir a eficiência e a qualidade da comunicação acústica proposta no projeto.
 
 
-<p align="center"><b>Figura 4 – Transmissor montado em portoboard </b></p>
+<p align="center"><b>Figura 11 – Transmissor montado em portoboard </b></p>
 
 <p align="center">
   <img src="image-10.png" alt="Transdutor Ultrassônico" width="350">
@@ -464,10 +416,10 @@ Após os testes a proposta de circuito transmissor demonstrou excelente desempen
 
 <p align="center">
   <span style="display:inline-block; width:250px; text-align:center;">
-    <b>Figura 1 – Legenda da primeira imagem</b>
+    <b>Figura 12 – Sinal quadrado gerado pelo transistor BJT</b>
   </span>
   <span style="display:inline-block; width:190px; text-align:center;">
-    <b>Figura 2 – Legenda da segunda imagem</b>
+    <b>Figura 13 – Sinal enviado</b>
   </span>
 </p>
 <p align="center">
@@ -479,22 +431,20 @@ Diante dos dados obtidos, é perceptível que a forma de onda resultante é prat
 
 Após essa etapa, foi desenvolvida uma placa de circuito impresso (PCI) caseira, confeccionada a partir da impressão do layout do circuito em uma impressora a laser utilizando papel fotográfico. O papel, ao ser aquecido contra uma placa de cobre, transfere o conteúdo da tinta para o cobre, que posteriormente é imerso em percloreto de ferro. Esse processo químico corrói o cobre não protegido pela tinta, formando as trilhas do circuito e resultando na placa de circuito impresso utilizada nos testes finais.
 
-<p align="center"><b>Figura 4 – Layout da placa de circuito impresso </b></p>
+<p align="center"><b>Figura 14 – Layout da placa de circuito impresso </b></p>
 
 <p align="center">
   <img src="image-15.png" alt="Transdutor Ultrassônico" width="350">
 </p>
 
-<p align="center"><b>
-Fontes: Autor
-</b></p>
+<p align="center"><b>Fonte: Autor</b></p>
 
 <p align="center">
   <span style="display:inline-block; width:250px; text-align:center;">
-    <b>Figura 1 – Placa circuito impresso - Vista superior</b>
+    <b>Figura 15 – Placa circuito impresso - Vista superior</b>
   </span>
   <span style="display:inline-block; width:190px; text-align:center;">
-    <b>Figura 2 – Placa circuito impresso - Vista inferior /b>
+    <b>Figura 16 – Placa circuito impresso - Vista inferior</b>
   </span>
 </p>
 <p align="center">
@@ -503,12 +453,14 @@ Fontes: Autor
 </p>
 <p align="center"><b>Fonte: Autor</b></p>
 
+
+
 # Recepção
 
 
 Para a avaliação e validação da etapa de recepção, foi utilizado um grande recipiente contendo água, no qual os transdutores de envio e recepção foram submersos de modo a ficarem totalmente cobertos. Os transdutores foram posicionados a uma distância aproximada de 10 cm entre si, conforme ilustrado abaixo. Essa configuração permitiu realizar testes controlados das etapas de transmissão e recepção do sistema em um ambiente aquático, garantindo condições adequadas para análise do desempenho do modem acústico desenvolvido.
 
-<p align="center"><b>Figura: Ambiente de Testes</b></p>
+<p align="center"><b>Figura 17 = Ambiente de Testes</b></p>
 
 
   </span>
@@ -521,7 +473,7 @@ Para a avaliação e validação da etapa de recepção, foi utilizado um grande
 
 Com o ambiente de testes montado, foi possível iniciar os experimentos de recepção. Durante esses testes, observou-se que a etapa de filtragem, independente da topologai de filtro passa faixa, introduzia uma distorção significativa no sinal recebido. Uma possível causa para esse comportamento pode estar relacionada ao slew rate do amplificador operacional utilizado, pois, nas regiões onde a curva senoidal apresenta maiores variações, surgem picos triangulares característicos de limitação de taxa de variação. Esse efeito é típico quando o slew rate do amplificador não é suficiente para acompanhar as rápidas mudanças do sinal, comprometendo a fidelidade da forma de onda recebida.
 
-<p align="center"><b>Figura 4 –Sinal distorcido </b></p>
+<p align="center"><b>Figura 18 – Sinal distorcido </b></p>
 
 <p align="center">
   <img src="image-18.png" alt="Transdutor Ultrassônico" width="350">
@@ -533,7 +485,7 @@ Fontes: Autor
 
 Diante dos resultados insatisfatórios, optou-se por simplificar ainda mais o circuito, removendo a etapa de filtragem e mantendo apenas uma etapa de amplificação de ganho, utilizando o amplificador operacional na configuração inversora. No entanto, mesmo com essa modificação, não foi possível alcançar uma qualidade de sinal satisfatória na recepção, indicando que outros fatores limitantes podem estar presentes no sistema.
 
-<p align="center"><b>Figura - Sinais obtidos com circuito simplificado</b></p>
+<p align="center"><b>Figura 19 - Sinais obtidos com circuito simplificado</b></p>
 
   </span>
 </p>
@@ -545,7 +497,7 @@ Diante dos resultados insatisfatórios, optou-se por simplificar ainda mais o ci
 
 Nesses últimos testes, é possível observar uma grande distorção do sinal após o condicionamento (em laranja) em comparação ao sinal recebido diretamente do transdutor (em verde/ciano). Apesar dessa distorção significativa introduzida pelo circuito de condicionamento, em todos os casos foi verificada a manutenção do pico de frequência original, o que pôde ser confirmado por meio da análise das transformadas rápidas de Fourier (FFT) aplicadas aos sinais obtidos.
 
-<p align="center"><b>Figura - Sinais obtidos com circuito simplificado</b></p>
+<p align="center"><b>Figura 17 - Sinais obtidos com circuito simplificado</b></p>
 
   </span>
 </p>
@@ -565,7 +517,7 @@ Então faz necessário o dimensionamento desses filtros, utilizou-se o software 
 
 Nas imagens anteriores que mostram os dados coletados, percebe-se que as principais frequências de transmissão aparecem em 10,8 kHz e 11,8 kHz. Assim, foram realizados diversos testes com filtros digitais, sendo que os melhores resultados foram obtidos utilizando dois filtros passa-faixa de oitava ordem, cada um com largura de banda de 500 Hz, centralizados em suas respectivas frequências. Esses filtros permitiram isolar de forma eficiente os sinais transmitidos, proporcionando o processo de demodulação.
 
-<p align="center"><b>Figura 4 –Função de transferência filtro passa faixa centrado em 9.8 khz </b></p>
+<p align="center"><b>Figura 18 – Função de transferência filtro passa faixa centrado em 9.8 khz </b></p>
 
 <p align="center">
   <img src="image-23.png" alt="Transdutor Ultrassônico" width="350">
@@ -576,7 +528,7 @@ Fontes: Autor
 </b></p>
 
 
-<p align="center"><b>Figura 4 –Sinal distorcido </b></p>
+<p align="center"><b>Figura 19 – Gráfico de bode filtro em 9.8k Hz </b></p>
 
 <p align="center">
   <img src="image-28.png" alt="Transdutor Ultrassônico" width="350">
@@ -587,13 +539,13 @@ Fontes: Autor
 </b></p>
 
 
-<p align="center"><b>Figura 4 –Função de transferência filtro passa faixa centrado em 10.8 khz  </b></p>
+<p align="center"><b>Figura 20 – Função de transferência filtro passa faixa centrado em 10.8 khz  </b></p>
 
 <p align="center">
   <img src="image-25.png" alt="Transdutor Ultrassônico" width="350">
 </p>
 
-<p align="center"><b>Figura 4 –Sinal distorcido </b></p>
+<p align="center"><b>Figura 21 – Gráfico de bode filtro em 9.8k Hz </b></p>
 
 <p align="center">
   <img src="image-29.png" alt="Transdutor Ultrassônico" width="350">
@@ -606,7 +558,7 @@ Fontes: Autor
 
 Após diversos testes foi possível concluir que colentando 2048 amostras com uma taxa de amostragem d 31 kHz, é possível ientificar com clareza a frqeuencia enviada, abaixo é mostrado o sinal filtrado em cada filtro passa faixa.
 
-<p align="center"><b>Figura - Sinais obtidos com após filtragem</b></p>
+<p align="center"><b>Figura 22 - Sinais obtidos após filtragem</b></p>
 
   </span>
 </p>
@@ -615,6 +567,15 @@ Após diversos testes foi possível concluir que colentando 2048 amostras com um
   <img src="image-27.png" alt="Figura 2" width="230"/>
 </p>
 <p align="center"><b>Fonte: Autor</b></p>
+
+Após o desenvolvimento dos códigos de transmissão e recepção, foram realizados testes práticos utilizando o ESP32-S3. No transmissor, foi implementada uma rotina responsável por alternar entre o envio de dois sinais de frequência: 40.800 Hz e 41.800 Hz, sendo cada frequência transmitida durante 10 ms. 
+
+No lado da recepção, o ESP32-S3 realizava a aquisição contínua do sinal recebido, aplicando dois filtros passa-faixa centrados nas frequências previamente definidas. Em seguida, era calculada a energia dos sinais filtrados, possibilitando a identificação do bit transmitido a partir da frequência predominante.
+
+Durante o processo de calibração do código de recepção, observou-se que o tamanho do buffer impactava diretamente no tempo de aquisição, considerando uma frequência de amostragem de 32 kHz. Após uma série de testes, verificou-se que, a cada cinco aquisições, havia uma chance relativa de aproximadamente 25% de erro na detecção da frequência correta, resultando em possíveis trocas indevidas de bits.
+
+Contudo, ao aplicar uma média móvel sobre as últimas quatro definições de energia calculadas para cada frequência, foi possível eliminar virtualmente os erros de detecção, aumentando significativamente a confiabilidade do sistema. Dessa forma, comprovou-se uma transmissão eficaz a 100 bits por segundo, desde que se empregue a correção por média das últimas quatro medições de energia do sinal.
+
 
 ## Sistema de ganho automático
 
@@ -644,6 +605,9 @@ Durante o desenvolvimento do projeto, foram definidos objetivos específicos, os
 - **Integrar todas as etapas do projeto em um sistema funcional:**  
   As etapas de geração, transmissão, recepção e demodulação do sinal foram integradas em um sistema único e quase tototalmente funcional, permitindo a realização de testes do sistema como um todo.
 
+- **Garantir uma taxa de transmissão de pelo menos 100 bits/s:**  
+  Por mais que houveram diversos obstáculos enfrentados na recepção e demodulação, a taxa de transmissão do sistema atingiu o mínimo estabelecido de 100 bits por segundo. A instabilidade na aquisição do sinal e as perdas durante a transmissão comprometeram a taxa de dados efetiva.
+
 ### Objetivos específicos não cumpridos
 
 - **Condicionar o sinal recebido para aquisição pelo ESP32:**  
@@ -652,8 +616,6 @@ Durante o desenvolvimento do projeto, foram definidos objetivos específicos, os
 - **Realizar testes de comunicação a uma distância mínima de 5 metros:**  
   Devido a limitações no condicionamento do sinal recebido e questões relacionadas ao ambiente de testes, não foi possível validar a comunicação acústica com desempenho satisfatório para distâncias iguais ou superiores a 5 metros.
 
-- **Garantir uma taxa de transmissão de pelo menos 100 bits/s:**  
-  Em função dos obstáculos enfrentados na recepção e demodulação, a taxa de transmissão do sistema não atingiu o mínimo estabelecido de 100 bits por segundo. A instabilidade na aquisição do sinal e as perdas durante a transmissão comprometeram a taxa de dados efetiva.
 
 Esses resultados demonstram o progresso alcançado em partes essenciais do sistema, ao mesmo tempo em que evidenciam desafios práticos e limitações técnicas que poderão ser foco de melhorias em trabalhos futuros.
 
